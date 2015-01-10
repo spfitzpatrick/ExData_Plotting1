@@ -2,16 +2,29 @@
 # Reads data from 'household_power_consumption.txt' and produces a PNG graphic
 # (histogram) of 'Global Active Power' metric for the days 2007-02-01 and 2007-02-02
 
-# Assumes that the raw data file (household_power_consumption.txt) is present in the current
-# directory
+# Check to see if the data file is present in the current directory
+# If not then download the source zip file and unpack this
 
+fileURL <- "https://d396qusza40orc.cloudfront.net/exdata/data/household_power_consumption.zip"
+vDestDownloadFile <- "household_power_consumption.zip"
+vDataFile <- "household_power_consumption.txt"
+
+if(!file.exists(vDataFile))
+	{
+	message("Downloading data file - please wait ... ", appendLF = FALSE)
+	download.file(url = fileURL, destfile = vDestDownloadFile, method = "curl", quiet = TRUE)
+	message("Done", appendLF = TRUE)
+	message("Unzipping data file - please wait ... ", appendLF = FALSE)
+	unzip(vDestDownloadFile, overwrite = TRUE)
+	message("Done", appendLF = TRUE)
+	}
 
 # Read the data, limiting ourselves to the specified dates
 vRequiredDates <- c("1/2/2007", "2/2/2007")
 
 message("Reading data to plot ...")
 
-df.data <- subset(read.csv("household_power_consumption.txt", 
+df.data <- subset(read.csv(vDataFile, 
                 header = TRUE, 
                 sep = ";", 
                 dec = ".", 
